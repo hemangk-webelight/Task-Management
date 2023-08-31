@@ -1,23 +1,27 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/task-filter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
 import { Repository } from 'typeorm';
+import { User } from 'src/auth/user.entity';
 
 
 @Injectable()
 export class TasksService {
    
+    private logger = new Logger('TaskService')
     constructor(
         @InjectRepository(Task) 
         private taskRepository: Repository<Task>
         ){}
 
-        async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>{
+        async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>{
             
             const query = this.taskRepository.createQueryBuilder("task")
+
+            query.where('task.userId = :userId', { userId: user.id})
 
             const { status, search } = filterDto
             if(status){
@@ -28,24 +32,40 @@ export class TasksService {
             if(search){
                 query.andWhere('task.title LIKE :search OR task.description LIKE :search', {search: `%${search}%`})
             }
-            const tasks = await query.getMany();
-            return tasks
+
+            try {
+                const tasks = await query.getMany();
+                return tasks
+            } catch (error) {
+                this.logger.error(`Failed to get tasks for user '${user.username}, Filters: ${JSON.stringify(filterDto)}'`, error.stack)
+
+                throw new InternalServerErrorException()
+            }
         }
 
-    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    async createTask(createTaskDto: CreateTaskDto, userData: User): Promise<Partial<Task>> {
         
         const { title, description } = createTaskDto;
         const task = new Task()
         task.title = title;
         task.description = description;
         task.status = TaskStatus.OPEN;
-        await task.save()
+        task.user = userData
         
-        return task
+        try {
+            await task.save()
+        } catch (error) {
+            this.logger.error(`Failed to create a task for user '${userData.username}', Data: ${createTaskDto}`, error.stack)    
+
+            throw new InternalServerErrorException()
+        }
+        
+        const { user, ...rest} = task
+        return rest
     }
 
-    async getTaskById(id: number): Promise<Task>{
-        const found = await this.taskRepository.findOne({where: {id}});
+    async getTaskById(id: number, user: User): Promise<Task>{
+        const found = await this.taskRepository.findOne({where: {id, userId: user.id}});
 
         if(!found){
             throw new NotFoundException("Task with this id does not found")
@@ -55,18 +75,18 @@ export class TasksService {
     }
 
 
-    async deleteTask(id: number): Promise<void> {
+    async deleteTask(id: number, user:User): Promise<void> {
         
-        const result = await this.taskRepository.delete(id);
+        const result = await this.taskRepository.delete({id, userId: user.id});
         
         if(result.affected === 0){
             throw new NotFoundException("Task with this id does not found")
         }
     }
 
-    async updateTaskStatus(id: number, status: TaskStatus): Promise<Task>{
+    async updateTaskStatus(id: number, status: TaskStatus, user: User): Promise<Task>{
 
-        const task = await this.taskRepository.findOne({where: {id}})
+        const task = await this.getTaskById(id, user)
 
         if(!task){
             throw new NotFoundException("task with this id does not found")
