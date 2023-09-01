@@ -4,9 +4,9 @@ import * as config from 'config'
 import { DataSource, DataSourceOptions } from "typeorm";
 
 const dbconfig = config.get('db')
-console.log(dbconfig)
 
 export const typeOrmConfig: DataSourceOptions  = {
+
     type: dbconfig.type,
     host: process.env.RDS_HOSTNAME || dbconfig.host,
     port: process.env.RDS_PORT || dbconfig.port,
@@ -15,6 +15,7 @@ export const typeOrmConfig: DataSourceOptions  = {
     database: process.env.RDS_DB_NAME || dbconfig.database,
     entities: [Task, User],
     synchronize: process.env.TYPEORM_SYNC || dbconfig.synchronize
+
 }
 
 const datasource = new DataSource(typeOrmConfig);

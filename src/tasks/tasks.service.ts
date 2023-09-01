@@ -12,6 +12,7 @@ import { User } from 'src/auth/user.entity';
 export class TasksService {
    
     private logger = new Logger('TaskService')
+
     constructor(
         @InjectRepository(Task) 
         private taskRepository: Repository<Task>
@@ -24,19 +25,24 @@ export class TasksService {
             query.where('task.userId = :userId', { userId: user.id})
 
             const { status, search } = filterDto
+
             if(status){
 
                 query.andWhere('task.status = :status', {status})
             }
 
             if(search){
+
                 query.andWhere('task.title LIKE :search OR task.description LIKE :search', {search: `%${search}%`})
+           
             }
 
             try {
+
                 const tasks = await query.getMany();
                 return tasks
             } catch (error) {
+
                 this.logger.error(`Failed to get tasks for user '${user.username}, Filters: ${JSON.stringify(filterDto)}'`, error.stack)
 
                 throw new InternalServerErrorException()
@@ -65,10 +71,11 @@ export class TasksService {
     }
 
     async getTaskById(id: number, user: User): Promise<Task>{
+        
         const found = await this.taskRepository.findOne({where: {id, userId: user.id}});
 
         if(!found){
-            throw new NotFoundException("Task with this id does not found")
+            throw new NotFoundException("Task does not found")
         }
 
         return found;
@@ -80,7 +87,7 @@ export class TasksService {
         const result = await this.taskRepository.delete({id, userId: user.id});
         
         if(result.affected === 0){
-            throw new NotFoundException("Task with this id does not found")
+            throw new NotFoundException("Task does not found")
         }
     }
 
@@ -89,7 +96,7 @@ export class TasksService {
         const task = await this.getTaskById(id, user)
 
         if(!task){
-            throw new NotFoundException("task with this id does not found")
+            throw new NotFoundException("Task does not found")
         }
         task.status = status;
         await task.save()

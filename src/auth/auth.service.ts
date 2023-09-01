@@ -11,17 +11,17 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
 
     private logger = new Logger('AuthService')
+
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
         private jwtService: JwtService
-    ){}
+    ) { }
 
-    async signup(authCredentialsDto: AuthCredentialsDto): Promise<void>{
+    async signup(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+
         const { username, password } = authCredentialsDto;
-        
-        
-        
+
         const user = new User()
         user.username = username;
         user.salt = await bcrypt.genSalt();
@@ -32,39 +32,39 @@ export class AuthService {
         try {
             await user.save()
         } catch (error) {
-            if(error.code === '23505'){
+            if (error.code === '23505') {
                 throw new ConflictException("User with this name already exist");
-            }else{
+            } else {
                 throw new InternalServerErrorException()
             }
         }
     }
 
-    private async hashPassword(password: string, salt: string): Promise<string>{
+    private async hashPassword(password: string, salt: string): Promise<string> {
         return bcrypt.hash(password, salt);
     }
 
 
-    async signin(authCredentialsDto: AuthCredentialsDto): Promise<{ access_Token: string}>{
-        
+    async signin(authCredentialsDto: AuthCredentialsDto): Promise<{ access_Token: string }> {
+
         const { username, password } = authCredentialsDto;
 
-        const payload: Jwtpayload = { username}
+        const payload: Jwtpayload = { username }
 
-        const user = await this.userRepository.findOne({where : {username}})
+        const user = await this.userRepository.findOne({ where: { username } })
 
-        if(!user){
+        if (!user) {
             throw new NotFoundException("Invalid Credentials");
-        }else{
+        } else {
             const password_match = await bcrypt.compare(password, user.password)
 
-            if(!password_match){
+            if (!password_match) {
                 throw new NotFoundException("Invalid Credentials");
             }
 
-                const access_Token = await this.jwtService.sign(payload)
-                this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`)
-                return { access_Token }
+            const access_Token = await this.jwtService.sign(payload)
+            this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`)
+            return { access_Token }
         }
     }
 }
