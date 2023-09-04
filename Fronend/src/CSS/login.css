@@ -1,0 +1,115 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Raleway, sans-serif;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.screen{
+    /* background: linear-gradient(90deg, #5D54A4,#7C7888); */
+    background: white;
+    position: relative;
+    width: 360px;
+    border-radius: 5px;
+    /* height: 688px; */
+    box-shadow: 0 0 24px #5C5696;
+}
+.screen__content{
+    z-index: 3;
+    position: relative;
+    height: 100%;
+}
+.screen__content h1{
+    padding: 5px 0 5px 0;
+    text-align: center;
+    width: 90%;
+    margin: 5px auto;
+}
+.screen__background{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    clip-path: inset(0 0 0 0);
+}
+.login {
+    width: 320px;
+    padding: 25px 0 25px 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.login__field{
+    padding: 20px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 85%;
+}
+.login__icon {
+    position: absolute;
+    top: 50px;
+    color: #010104;
+}
+.login__input {
+    border: none;
+    border-bottom: 2px solid #010104;
+    background: none;
+    padding: 10px;
+    padding-left: 24px;
+    font-weight: 700;
+    /* width: 75%; */
+    transition: 0.2s;
+}
+
+.login__input:active,
+.login__input:focus,
+.login__input:hover {
+    outline: none;
+    border-block-color: #6A679E;
+}
+.login__submit{
+    background: linear-gradient(315deg, #2164cf 0%, #0999f9 74%);
+    font-size: 14px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    color: #4C4890;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.login__submit:active,
+.login__submit:focus,
+.login__submit:hover {
+     transform: scale(1.05);
+    outline: none;
+}
+
+.button__icon {
+    font-size: 24px;
+    margin-left: auto;
+    /* color: #787585; */
+    color: #1624a0;
+}
+.login a{
+    text-decoration: none;
+    color: #1624a0;
+}

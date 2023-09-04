@@ -1,0 +1,116 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Raleway, sans-serif;
+}
+
+.newTask__container{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0, 0, 0, 0.7);
+}
+.newTask__screen{
+    /* background: linear-gradient(90deg, #5D54A4,#7C7888); */
+    background: white;
+    position: relative;
+    width: 360px;
+    border-radius: 5px;
+    /* height: 688px; */
+    box-shadow: 0 0 15px #2f3baa;
+}
+.newTask__screen .cancel__icon {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 20px;
+}
+.newTask__screen__content{
+    z-index: 3;
+    position: relative;
+    height: 100%;
+}
+.newTask__screen__content h1{
+    padding: 5px 0 5px 0;
+    text-align: center;
+    width: 90%;
+    margin: 5px auto;
+}
+.newTask {
+    width: 320px;
+    padding: 25px 0 25px 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.newTask__field{
+    padding: 20px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 85%;
+}
+
+.newTask__input {
+    border: none;
+    border-bottom: 2px solid #010104;
+    background: none;
+    padding: 10px;
+    font-size: 17px;
+    transition: 0.2s;
+}
+
+.newTask__input:active,
+.newTask__input:focus,
+.newTask__input:hover {
+    outline: none;
+    border-block-color: #6A679E;
+}
+.newTask__submit{
+    background: linear-gradient(315deg, #2164cf 0%, #0999f9 74%);
+    font-size: 14px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    width: 90%;
+    color: #4C4890;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.newTask__submit:active,
+.newTask__submit:focus,
+.newTask__submit:hover {
+     transform: scale(1.05);
+    outline: none;
+}
+
+.newTask__button__icon {
+    font-size: 24px;
+    margin-left: auto;
+    /* color: #787585; */
+    color: #1624a0;
+}
+
+.btn__action{
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 10px;
+}
