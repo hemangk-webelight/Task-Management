@@ -29,11 +29,9 @@ let AuthController = class AuthController {
             message: "Sign up is Successfull"
         });
     }
-    async signin(authCredentialsDto, res) {
-        const token = await this.authService.signin(authCredentialsDto);
-        return res.status(200).json({
-            data: token
-        });
+    async signin(loginCredentialsDto, res) {
+        const token = await this.authService.signin(loginCredentialsDto);
+        return res.status(200).json({ message: "Login Successfull", token });
     }
     test(user) {
         console.log(user);
@@ -53,7 +51,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [authCredentials_dto_1.AuthCredentialsDto, Object]),
+    __metadata("design:paramtypes", [authCredentials_dto_1.LoginCredentialsDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signin", null);
 __decorate([

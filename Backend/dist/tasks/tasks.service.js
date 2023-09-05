@@ -31,7 +31,7 @@ let TasksService = class TasksService {
             query.andWhere('task.status = :status', { status });
         }
         if (search) {
-            query.andWhere('task.title LIKE :search OR task.description LIKE :search', { search: `%${search}%` });
+            query.andWhere('LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)', { search: `%${search}%` });
         }
         try {
             const tasks = await query.getMany();

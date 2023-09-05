@@ -1,4 +1,18 @@
-import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post, Query, Res, UseGuards, ValidationPipe } from '@nestjs/common';
+import { 
+    Body, 
+    Controller, 
+    Delete, 
+    Get, 
+    Logger, 
+    Param, 
+    ParseIntPipe, 
+    Patch, 
+    Post, 
+    Query, 
+    Res, 
+    UseGuards, 
+    ValidationPipe 
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/task-filter.dto';
@@ -28,7 +42,8 @@ export class TasksController {
 
         if(!tasks.length){
             return res.status(404).json({
-                message: "Task does not found"
+                message: "Task does not found",
+                data: []
             })
         }
 

@@ -32,7 +32,8 @@ let TasksController = class TasksController {
         const tasks = await this.tasksService.getTasks(filterDto, user);
         if (!tasks.length) {
             return res.status(404).json({
-                message: "Task does not found"
+                message: "Task does not found",
+                data: []
             });
         }
         return res.status(200).json({

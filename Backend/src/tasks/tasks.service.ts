@@ -1,4 +1,9 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { 
+    Injectable, 
+    InternalServerErrorException, 
+    Logger, 
+    NotFoundException 
+} from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/task-filter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,7 +38,7 @@ export class TasksService {
 
             if(search){
 
-                query.andWhere('task.title LIKE :search OR task.description LIKE :search', {search: `%${search}%`})
+                query.andWhere('LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)', {search: `%${search}%`})
            
             }
 
@@ -50,8 +55,8 @@ export class TasksService {
         }
 
     async createTask(createTaskDto: CreateTaskDto, userData: User): Promise<Partial<Task>> {
+        
         console.log("service",createTaskDto)
-
 
         const { title, description } = createTaskDto;
         const task = new Task()

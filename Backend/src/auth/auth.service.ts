@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt'
-import { AuthCredentialsDto } from './dto/authCredentials.dto';
+import { AuthCredentialsDto, LoginCredentialsDto } from './dto/authCredentials.dto';
 import { Jwtpayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
 
@@ -45,9 +45,9 @@ export class AuthService {
     }
 
 
-    async signin(authCredentialsDto: AuthCredentialsDto): Promise<{ access_Token: string }> {
+    async signin(loginCredentialsDto: LoginCredentialsDto): Promise<string> {
 
-        const { username, password } = authCredentialsDto;
+        const { username, password } = loginCredentialsDto;
 
         const payload: Jwtpayload = { username }
 
@@ -64,7 +64,7 @@ export class AuthService {
 
             const access_Token = await this.jwtService.sign(payload)
             this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`)
-            return { access_Token }
+            return  access_Token 
         }
     }
 }

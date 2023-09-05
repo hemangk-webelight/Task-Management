@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { AuthCredentialsDto } from './dto/authCredentials.dto';
+import { AuthCredentialsDto, LoginCredentialsDto } from './dto/authCredentials.dto';
 import { JwtService } from '@nestjs/jwt';
 export declare class AuthService {
     private userRepository;
@@ -9,7 +9,5 @@ export declare class AuthService {
     constructor(userRepository: Repository<User>, jwtService: JwtService);
     signup(authCredentialsDto: AuthCredentialsDto): Promise<void>;
     private hashPassword;
-    signin(authCredentialsDto: AuthCredentialsDto): Promise<{
-        access_Token: string;
-    }>;
+    signin(loginCredentialsDto: LoginCredentialsDto): Promise<string>;
 }

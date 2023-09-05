@@ -2,9 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import * as config from 'config'
-import * as bodyParser from 'body-parser'
 
-import express from 'express';
+import * as express from 'express'; 
 
 
 async function bootstrap() {
@@ -13,13 +12,14 @@ async function bootstrap() {
   const logger = new Logger('bootstrap')
   const app = await NestFactory.create(AppModule, {bodyParser: true});
 
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({extended: true}))
+  app.use(express.json())
+  app.use(express.urlencoded({extended: true}))
 
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       whitelist: true,
+      stopAtFirstError: true,
     })
   );
   app.enableCors();

@@ -46,8 +46,8 @@ let AuthService = class AuthService {
     async hashPassword(password, salt) {
         return bcrypt.hash(password, salt);
     }
-    async signin(authCredentialsDto) {
-        const { username, password } = authCredentialsDto;
+    async signin(loginCredentialsDto) {
+        const { username, password } = loginCredentialsDto;
         const payload = { username };
         const user = await this.userRepository.findOne({ where: { username } });
         if (!user) {
@@ -60,7 +60,7 @@ let AuthService = class AuthService {
             }
             const access_Token = await this.jwtService.sign(payload);
             this.logger.debug(`Generated JWT token with payload ${JSON.stringify(payload)}`);
-            return { access_Token };
+            return access_Token;
         }
     }
 };

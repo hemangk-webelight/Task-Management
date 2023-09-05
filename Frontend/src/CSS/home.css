@@ -1,13 +1,11 @@
 .task__container{
     margin: 10px 0 10px 0;
     width: 50vw;
-    height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
-    /* background: linear-gradient(90deg, #541ABA, #541AAA); */
-    /* background: #cf8700; */
 }
 .task__header{
     border-bottom: 1px solid #183153;
@@ -24,14 +22,19 @@
 .task__header button, .task__content-header input, .task__content-header select, .task__action select {
     border-radius: 4px;
     border: none;
-    padding: 5px;
+    font-size: 15px;
+    padding: 7px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 8vw;
 }
+#logout_btn{
+    justify-content: center;
+}
 .task__header button i{
     color: #776BCC;
+    font-size: 18px;
 }
 
 .task__content {
@@ -63,9 +66,10 @@
     margin: 15px 0 15px 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
 }
 .task__action .trash_icon {
     color: #183153;
     cursor: pointer;
+    font-size: 20px;
 }

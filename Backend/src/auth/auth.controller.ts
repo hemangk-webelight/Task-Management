@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Req, Res, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthCredentialsDto } from './dto/authCredentials.dto';
+import { AuthCredentialsDto, LoginCredentialsDto } from './dto/authCredentials.dto';
 import { User } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
@@ -25,14 +25,12 @@ export class AuthController {
 
     @Post('/signin')
     async signin(
-        @Body() authCredentialsDto: AuthCredentialsDto,
+        @Body() loginCredentialsDto: LoginCredentialsDto,
         @Res() res: Response) {
 
-        const token = await this.authService.signin(authCredentialsDto)
+        const token = await this.authService.signin(loginCredentialsDto)
 
-        return res.status(200).json({
-            data: token
-        })
+        return res.status(200).json({message: "Login Successfull", token})
     }
 
     @Post('test')
