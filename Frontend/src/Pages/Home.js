@@ -45,23 +45,28 @@ const Home = () => {
   }
 
   useEffect(() => {
-
-    fetchTasks()
-
-    if (search) {
+    if (search.length > 0) {
       searchHandler()
     }
-
+    fetchTasks()
   }, [isOpen, search])
 
-  const deleteTask = async (id) => {
 
-    const response = await axios.delete(`http://localhost:3000/tasks/${id}`, header)
+  const deleteTaskHandler = async (id) => {
 
-    const data = await response
-    toast.success(data.data.message)
-    fetchTasks();
+
+    try {
+      const response = await axios.delete(`http://localhost:3000/tasks/${id}`, header)
+      const data = await response
+      toast.success(data.data.message)
+      fetchTasks();
+
+    } catch (error) {
+
+      toast.error(error.response.data.message)
+    }
   }
+
 
   const taskStatusHandler = async (status, id) => {
     const task_status = {
@@ -180,8 +185,9 @@ const Home = () => {
                     </select>
                   </div>
 
-                  <FontAwesomeIcon className="trash_icon" icon={faTrashCan} onClick={() => { deleteTask(task.id) }} />
+                  <FontAwesomeIcon className="trash_icon" icon={faTrashCan} onClick={() => { deleteTaskHandler(task.id) }} />
                 </div>
+                <button onClick={() => navigate(`/task/${task.categoryId}`) }>Show task for similar category</button>
               </div>
             ))}
 

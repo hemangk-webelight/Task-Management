@@ -1,5 +1,6 @@
+import { Category } from "src/category/category.entity";
 import { Task } from "src/tasks/task.entity";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
 @Unique(['username'])
@@ -19,4 +20,8 @@ export class User extends BaseEntity {
 
     @OneToMany(type => Task, task => task.user, { eager: true})
     tasks: Task[] 
+
+    @ManyToOne(type => Category, category => category.users, { eager: false, nullable: true})
+    category: Category
+    
 }

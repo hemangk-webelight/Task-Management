@@ -18,9 +18,11 @@ const typeorm_1 = require("@nestjs/typeorm");
 const task_entity_1 = require("./task.entity");
 const task_status_enum_1 = require("./task-status.enum");
 const typeorm_2 = require("typeorm");
+const category_entity_1 = require("../category/category.entity");
 let TasksService = class TasksService {
-    constructor(taskRepository) {
+    constructor(taskRepository, categoryRepository) {
         this.taskRepository = taskRepository;
+        this.categoryRepository = categoryRepository;
         this.logger = new common_1.Logger('TaskService');
     }
     async getTasks(filterDto, user) {
@@ -44,20 +46,38 @@ let TasksService = class TasksService {
     }
     async createTask(createTaskDto, userData) {
         console.log("service", createTaskDto);
-        const { title, description } = createTaskDto;
+        const { title, description, categoryType } = createTaskDto;
         const task = new task_entity_1.Task();
         task.title = title;
         task.description = description;
         task.status = task_status_enum_1.TaskStatus.OPEN;
         task.user = userData;
+        let get_category = await this.categoryRepository.findOne({ where: { category: categoryType } });
+        console.log("hiii", get_category);
+        if (!get_category) {
+            get_category = new category_entity_1.Category();
+            get_category.category = categoryType;
+            get_category.users = [userData];
+            await this.categoryRepository.save(get_category);
+        }
+        else {
+            if (!get_category.users) {
+                get_category.users = [userData];
+            }
+            else {
+                get_category.users.push(userData);
+            }
+            await this.categoryRepository.save(get_category);
+        }
         try {
-            await task.save();
+            task.category = get_category;
+            await this.taskRepository.save(task);
         }
         catch (error) {
             this.logger.error(`Failed to create a task for user '${userData.username}', Data: ${createTaskDto}`, error.stack);
             throw new common_1.InternalServerErrorException();
         }
-        const { user, ...rest } = task;
+        const { user, category, ...rest } = task;
         return rest;
     }
     async getTaskById(id, user) {
@@ -87,6 +107,8 @@ exports.TasksService = TasksService;
 exports.TasksService = TasksService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(task_entity_1.Task)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(category_entity_1.Category)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], TasksService);
 //# sourceMappingURL=tasks.service.js.map

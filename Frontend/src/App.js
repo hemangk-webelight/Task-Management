@@ -6,6 +6,7 @@ import './App.css';
 import Login from './Pages/Login'
 import Signup from './Pages/Signup';
 import Home from './Pages/Home';
+import SimilarCategoryTasks from './Pages/SimilarCategoryTasks'
 import { ToastContainer } from 'react-toastify';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
          <Route path='/login' element={<Navigate to={'/'} />}/> 
          <Route path='/signup' element={<Signup />}/>
          <Route path='/task' element={ !token ? <Navigate to={'/'} /> :  <Home /> }/>
+         <Route path = '/task/:id' element = {<SimilarCategoryTasks />}/>
       </Routes>
       </>
     );

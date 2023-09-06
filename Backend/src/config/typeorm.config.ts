@@ -2,6 +2,7 @@ import { User } from "src/auth/user.entity";
 import { Task } from "src/tasks/task.entity";
 import * as config from 'config'
 import { DataSource, DataSourceOptions } from "typeorm";
+import { Category } from "src/category/category.entity";
 
 const dbconfig = config.get('db')
 
@@ -13,7 +14,7 @@ export const typeOrmConfig: DataSourceOptions  = {
     username: process.env.RDS_USERNAME || dbconfig.username,
     password: process.env.RDS_PASSWORD || dbconfig.password,
     database: process.env.RDS_DB_NAME || dbconfig.database,
-    entities: [Task, User],
+    entities: [Task, User, Category],
     synchronize: process.env.TYPEORM_SYNC || dbconfig.synchronize
 
 }

@@ -27,8 +27,6 @@ export class AuthService {
         user.salt = await bcrypt.genSalt();
         user.password = await this.hashPassword(password, user.salt);
 
-
-
         try {
             await user.save()
         } catch (error) {

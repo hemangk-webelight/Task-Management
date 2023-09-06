@@ -13,14 +13,15 @@ const tasks_service_1 = require("./tasks.service");
 const typeorm_1 = require("@nestjs/typeorm");
 const task_entity_1 = require("./task.entity");
 const auth_module_1 = require("../auth/auth.module");
+const category_entity_1 = require("../category/category.entity");
 let TasksModule = class TasksModule {
 };
 exports.TasksModule = TasksModule;
 exports.TasksModule = TasksModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([task_entity_1.Task]),
-            auth_module_1.AuthModule
+            typeorm_1.TypeOrmModule.forFeature([task_entity_1.Task, category_entity_1.Category]),
+            auth_module_1.AuthModule,
         ],
         controllers: [tasks_controller_1.TasksController],
         providers: [tasks_service_1.TasksService]

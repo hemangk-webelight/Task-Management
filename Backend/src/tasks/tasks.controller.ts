@@ -22,6 +22,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { Response } from 'express';
+import { CategoryPipe } from 'src/category/pipe/category-validate.pipe';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -55,7 +56,7 @@ export class TasksController {
 
     @Post()
     async createTask(
-        @Body() createTaskDto: CreateTaskDto,
+        @Body(CategoryPipe) createTaskDto: CreateTaskDto,
         @GetUser() user: User,
         @Res() res: Response
     ): Promise<Response> {
@@ -115,4 +116,13 @@ export class TasksController {
             data: updated_task
         })
     }
+
+    // @Get('/categories')
+    // async getCategories(): Promise<Category[]>{
+// 
+        // const categories = this.tasksService.getCategories();
+// 
+        // return categories
+        // 
+    // }
 }

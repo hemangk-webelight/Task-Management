@@ -1,14 +1,22 @@
 import axios from 'axios'
 import '../CSS/newTask.css'
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const NewTask = ({ setIsOpen }) => {
 
+  useEffect( () => {
+    getCategories()
+  }, [])
+
   const [task, setTask] = useState({
     title: '',
-    description: ''
+    description: '',
+    categoryType: ''
   })
+
+  const [categories, setCategories] = useState([])
 
   const [errors, setErrors] = useState({
     titleError: '',
@@ -32,8 +40,18 @@ const NewTask = ({ setIsOpen }) => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const addTaskHandler = async (e) => {
 
+  const getCategories = async() => {
+    const response = await axios.get('http://localhost:3000/category')
+
+    const categoryOptions = await response
+    
+    setCategories(categoryOptions.data.data)
+  }
+  const addTaskHandler = async (e) => {
+    
+  
+    console.log(task)
     try {
 
       e.preventDefault();
@@ -70,6 +88,20 @@ const NewTask = ({ setIsOpen }) => {
 
             <form className="newTask" onSubmit={addTaskHandler}>
 
+              <div className='newTask_category'>
+
+             
+              <label htmlFor='category'>Select Category :</label> 
+
+              <select id='category' name='categoryType' onChange={changeHandler}>
+                <option value="">--Select--</option>
+                {
+                  categories.length && categories.map((category, index) => (
+                    <option key={index} value={category}>{category}</option>
+                  ))
+                }
+              </select>
+              </div>
               <div className="newTask__field">
                 <label htmlFor="title">Title:</label>
                 <input
@@ -82,7 +114,7 @@ const NewTask = ({ setIsOpen }) => {
                 <span style={{ color: 'red', fontSize: '14px' }} >{errors.titleError}</span>
               </div>
 
-              <div className="login__field">
+              <div className="newTask__field">
                 <label htmlFor="description">Description:</label>
                 <input
                   type="text"

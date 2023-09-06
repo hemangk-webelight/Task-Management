@@ -13,6 +13,7 @@ exports.Task = void 0;
 const typeorm_1 = require("typeorm");
 const task_status_enum_1 = require("./task-status.enum");
 const user_entity_1 = require("../auth/user.entity");
+const category_entity_1 = require("../category/category.entity");
 let Task = class Task extends typeorm_1.BaseEntity {
 };
 exports.Task = Task;
@@ -40,6 +41,14 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Task.prototype, "userId", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(type => category_entity_1.Category, category => category.tasks, { eager: false }),
+    __metadata("design:type", category_entity_1.Category)
+], Task.prototype, "category", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Task.prototype, "categoryId", void 0);
 exports.Task = Task = __decorate([
     (0, typeorm_1.Entity)('tasks')
 ], Task);

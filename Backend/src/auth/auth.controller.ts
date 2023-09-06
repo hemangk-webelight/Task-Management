@@ -15,7 +15,7 @@ export class AuthController {
     async signup(
         @Body() authCredentialsDto: AuthCredentialsDto,
         @Res() res: Response): Promise<Response> {
-
+            
         const new_User = await this.authService.signup(authCredentialsDto)
 
         return res.status(201).json({

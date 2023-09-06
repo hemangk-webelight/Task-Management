@@ -40,7 +40,7 @@ const Signup = () => {
 
       if (response.status === 201) {
         const data = await response
-        console.log(data)
+        
         toast.success(data.data.message)
         navigate('/login')
       }

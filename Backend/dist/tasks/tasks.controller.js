@@ -22,6 +22,7 @@ const task_status_enum_1 = require("./task-status.enum");
 const passport_1 = require("@nestjs/passport");
 const user_entity_1 = require("../auth/user.entity");
 const get_user_decorator_1 = require("../auth/get-user.decorator");
+const category_validate_pipe_1 = require("../category/pipe/category-validate.pipe");
 let TasksController = class TasksController {
     constructor(tasksService) {
         this.tasksService = tasksService;
@@ -85,7 +86,7 @@ __decorate([
 ], TasksController.prototype, "getTasks", null);
 __decorate([
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(category_validate_pipe_1.CategoryPipe)),
     __param(1, (0, get_user_decorator_1.GetUser)()),
     __param(2, (0, common_1.Res)()),
     __metadata("design:type", Function),

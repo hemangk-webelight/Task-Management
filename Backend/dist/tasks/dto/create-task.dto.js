@@ -15,6 +15,10 @@ class CreateTaskDto {
 }
 exports.CreateTaskDto = CreateTaskDto;
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], CreateTaskDto.prototype, "categoryType", void 0);
+__decorate([
     (0, class_validator_1.IsNotEmpty)({ message: "Please provide task title, it should not be empty" }),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "title", void 0);

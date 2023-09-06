@@ -4,12 +4,12 @@ import { TasksService } from './tasks.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
+import { Category } from '../category/category.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Task]),
-    AuthModule
+    TypeOrmModule.forFeature([Task, Category]),
+    AuthModule,
   ],
   controllers: [TasksController],
   providers: [TasksService]
