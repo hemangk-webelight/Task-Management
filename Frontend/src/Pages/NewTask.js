@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 const NewTask = ({ setIsOpen }) => {
 
-  useEffect( () => {
+  useEffect(() => {
     getCategories()
   }, [])
 
@@ -35,23 +35,24 @@ const NewTask = ({ setIsOpen }) => {
       descriptionError: ''
     })
   }
+
   const header = {
     headers: {
       'Authorization': `Bearer ${token}`
     }
   }
 
-  const getCategories = async() => {
+  const getCategories = async () => {
     const response = await axios.get('http://localhost:3000/category')
 
     const categoryOptions = await response
-    
+
     setCategories(categoryOptions.data.data)
   }
+
+
   const addTaskHandler = async (e) => {
-    
-  
-    console.log(task)
+
     try {
 
       e.preventDefault();
@@ -90,17 +91,17 @@ const NewTask = ({ setIsOpen }) => {
 
               <div className='newTask_category'>
 
-             
-              <label htmlFor='category'>Select Category :</label> 
 
-              <select id='category' name='categoryType' onChange={changeHandler}>
-                <option value="">--Select--</option>
-                {
-                  categories.length && categories.map((category, index) => (
-                    <option key={index} value={category}>{category}</option>
-                  ))
-                }
-              </select>
+                <label htmlFor='category'>Select Category :</label>
+
+                <select id='category' name='categoryType' onChange={changeHandler}>
+                  <option value="">--Select--</option>
+                  {
+                    categories.length && categories.map((category, index) => (
+                      <option key={index} value={category}>{category}</option>
+                    ))
+                  }
+                </select>
               </div>
               <div className="newTask__field">
                 <label htmlFor="title">Title:</label>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import '../CSS/login.css'
 import axios from 'axios'
@@ -7,7 +7,7 @@ import axios from 'axios'
 const Login = () => {
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   })
 
@@ -50,7 +50,7 @@ const Login = () => {
 
       const errorMsg = error.response.data.message
       if (Array.isArray(errorMsg)) {
-        const nameError = error.response.data.message.filter(name => name.includes("username"))
+        const nameError = error.response.data.message.filter(name => name.includes("email"))
         const passwordError = error.response.data.message.filter(name => name.includes("password"))
         setErrors(state =>
         ({
@@ -74,15 +74,15 @@ const Login = () => {
           <form className="login" onSubmit={loginHandler}>
 
             <div className="login__field">
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="username">email:</label>
               <i className="login__icon fa fa-user"></i>
               <input
-                type="text"
+                type="email"
                 className="login__input"
-                value={formData.username}
+                value={formData.email}
                 onChange={changeHandler}
-                id='username'
-                name='username' />
+                id='email'
+                name='email' />
               <span style={{ color: 'red', fontSize: '14px' }} >{errors.nameError}</span>
             </div>
 
@@ -97,6 +97,11 @@ const Login = () => {
                 id='password'
                 name='password' />
               <span style={{ color: 'red', fontSize: '14px' }} >{errors.passwordError}</span>
+            </div>
+            
+            <div className='password__links'>
+              <NavLink to='/login/forgot-password'> Forgot Password ?</NavLink>
+              <NavLink to='/login/change-password'> Change Password ?</NavLink>
             </div>
 
             <button className="button login__submit">

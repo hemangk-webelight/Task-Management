@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import Header from "../Component/Header";
 
 
 const Home = () => {
@@ -58,6 +59,7 @@ const Home = () => {
     try {
       const response = await axios.delete(`http://localhost:3000/tasks/${id}`, header)
       const data = await response
+      console.log(data)
       toast.success(data.data.message)
       fetchTasks();
 
@@ -110,9 +112,20 @@ const Home = () => {
       setTasks(data.data.data)
       setSearchError("")
     } catch (error) {
-
-      console.log(error.response.data.message)
       setSearchError(error.response.data.message)
+    }
+
+  }
+
+  const categoryHandler = async (category) => {
+
+    try {
+      const response = await axios.get(`http://localhost:3000/tasks?category=${category}`, header)
+      const data = await response
+      setTasks(data.data.data)
+      console.log(data)
+    } catch (error) {
+      console.log(error)
     }
 
   }
@@ -120,16 +133,7 @@ const Home = () => {
   return (
     <>
       <div className="task__container">
-        <div className="task__header">
-          <h2>Task Manager</h2>
-          <button onClick={() => { setIsOpen(true) }}>
-            <p>Create new task</p>
-            <i className="fa fa-plus"></i>
-          </button>
-          <button id="logout_btn" onClick={() => { localStorage.removeItem("token"); navigate("/login") }}>
-            <p>Logout</p>
-          </button>
-        </div>
+        <Header />
         <div className="task__content">
           <div className="task__content-header">
 
@@ -138,6 +142,11 @@ const Home = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search your task here" />
+
+            <button onClick={() => { setIsOpen(true) }}>
+              <p>Create new task</p>
+              <i className="fa fa-plus"></i>
+            </button>
 
             <select
               name="Filter_status"
@@ -148,6 +157,19 @@ const Home = () => {
               <option value="OPEN">OPEN</option>
               <option value="IN_PROGRESS">IN_PROGRESS</option>
               <option value="DONE">DONE</option>
+
+            </select>
+
+            <select
+              name="Filter_category"
+              id="Filter_category"
+              onChange={(e) => categoryHandler(e.target.value)}>
+
+              <option value="REACTJS">REACTJS</option>
+              <option value="NODEJS">NODEJS</option>
+              <option value="EXPRESSJS">EXPRESSJS</option>
+              <option value="NESTJS">NESTJS</option>
+              <option value="NEXTJS">NEXTJS</option>
 
             </select>
           </div>
@@ -161,7 +183,7 @@ const Home = () => {
               searchError && <p style={{ textAlign: 'center' }}>No tasks found</p>
             }
             {tasks.length > 0 && !searchError && tasks.map(task => (
-              <div className="task__content-task" key={task.id}>
+              <div className="task__content-task" key={task._id}>
                 <div>
                   <h4>{task.title}</h4>
                   <p>
@@ -176,7 +198,7 @@ const Home = () => {
                       name="task_status"
                       id="task_status"
                       defaultValue={task.status}
-                      onChange={(e) => taskStatusHandler(e.target.value, task.id)}>
+                      onChange={(e) => taskStatusHandler(e.target.value, task._id)}>
 
                       <option value="OPEN">OPEN</option>
                       <option value="IN_PROGRESS">IN_PROGRESS</option>
@@ -185,9 +207,9 @@ const Home = () => {
                     </select>
                   </div>
 
-                  <FontAwesomeIcon className="trash_icon" icon={faTrashCan} onClick={() => { deleteTaskHandler(task.id) }} />
+                  <FontAwesomeIcon className="trash_icon" icon={faTrashCan} onClick={() => { deleteTaskHandler(task._id) }} />
                 </div>
-                <button onClick={() => navigate(`/task/${task.categoryId}`) }>Show task for similar category</button>
+                <button onClick={() => navigate(`/task/${task.category}`)}>Show more tasks</button>
               </div>
             ))}
 

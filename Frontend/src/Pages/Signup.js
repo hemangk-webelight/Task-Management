@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 const Signup = () => {
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   })
 
@@ -18,6 +18,7 @@ const Signup = () => {
   })
 
   const navigate = useNavigate()
+
 
   const changeHandler = (event) => {
 
@@ -40,21 +41,24 @@ const Signup = () => {
 
       if (response.status === 201) {
         const data = await response
-        
+
         toast.success(data.data.message)
         navigate('/login')
       }
-
+      return
     } catch (error) {
 
-      const nameError = error.response.data.message.filter(name => name.includes("username"))
-      const passwordError = error.response.data.message.filter(name => name.includes("password"))
+      if (Array.isArray(error.response.data.message)) {
+        const nameError = error.response.data.message.filter(name => name.includes("email"))
+        const passwordError = error.response.data.message.filter(name => name.includes("password"))
 
-      setErrors(state =>
-      ({
-        ...state, nameError, passwordError
-      }))
+        setErrors(state =>
+        ({
+          ...state, nameError, passwordError
+        }))
 
+      }
+      toast.error(error.response.data.message)
     }
 
   }
@@ -71,15 +75,15 @@ const Signup = () => {
           <form className="login" onSubmit={signUpHandler}>
 
             <div className="login__field">
-              <label htmlFor="username">Username:</label>
+              <label htmlFor="username">email:</label>
               <i className="login__icon fa fa-user"></i>
               <input
-                type="text"
+                type="email"
                 className="login__input"
-                value={formData.username}
+                value={formData.email}
                 onChange={changeHandler}
-                id='username'
-                name='username' />
+                id='email'
+                name='email' />
               <span style={{ color: 'red', fontSize: '14px' }} >{errors.nameError}</span>
             </div>
 
