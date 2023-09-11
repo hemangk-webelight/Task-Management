@@ -9,6 +9,7 @@ export declare class Task {
     status: TaskStatus;
     user: User;
     category: Category;
+    categoryUUID: string;
 }
 export declare const TaskSchema: mongoose.Schema<Task, mongoose.Model<Task, any, any, any, mongoose.Document<unknown, any, Task> & Task & {
     _id: mongoose.Types.ObjectId;

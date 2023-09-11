@@ -1,4 +1,4 @@
-import "../CSS/home.css";
+import "../../CSS/home.css";
 import axios from "axios";
 import NewTask from "./NewTask";
 import { toast } from 'react-toastify';
@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
-import Header from "../Component/Header";
+import Header from "../../shared/Component/Header";
+import { BASE_CATEGORY_URL, BASE_TASK_URL, HEADER } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { getTasksData } from "../../features/taskSlice";
 
 
 const Home = () => {
@@ -15,34 +18,37 @@ const Home = () => {
 
   const [tasks, setTasks] = useState([]);
 
+  const [categories, setCategories] = useState([])
+
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState("")
 
   const navigate = useNavigate()
-
-  const token = localStorage.getItem("token")
-
-  const header = {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }
 
 
   const fetchTasks = async () => {
 
     try {
 
-      const response = await axios.get("http://localhost:3000/tasks", header)
+      const response = await axios.get(`${BASE_TASK_URL}`, HEADER)
 
       const data = await response;
 
       setTasks(data.data.data)
     } catch (error) {
+
       console.log(error.response.data.message)
     }
 
 
+  }
+
+  const getCategories = async () => {
+    const response = await axios.get(`${BASE_CATEGORY_URL}`)
+
+    const categoryOptions = await response
+
+    setCategories(categoryOptions.data.data)
   }
 
   useEffect(() => {
@@ -50,6 +56,7 @@ const Home = () => {
       searchHandler()
     }
     fetchTasks()
+    getCategories()
   }, [isOpen, search])
 
 
@@ -57,12 +64,10 @@ const Home = () => {
 
 
     try {
-      const response = await axios.delete(`http://localhost:3000/tasks/${id}`, header)
+      const response = await axios.delete(`${BASE_TASK_URL}/${id}`, HEADER)
       const data = await response
-      console.log(data)
-      toast.success(data.data.message)
       fetchTasks();
-
+      toast.success(data.data.message)
     } catch (error) {
 
       toast.error(error.response.data.message)
@@ -76,7 +81,7 @@ const Home = () => {
     }
 
     try {
-      const response = await axios.patch(`http://localhost:3000/tasks/${id}/status`, task_status, header)
+      const response = await axios.patch(`${BASE_TASK_URL}/${id}/status`, task_status, HEADER)
       const data = await response
       toast.success(data.data.message)
       fetchTasks();
@@ -91,7 +96,7 @@ const Home = () => {
 
     if (status !== "ALL") {
       try {
-        const response = await axios.get(`http://localhost:3000/tasks?status=${status}`, header)
+        const response = await axios.get(`${BASE_TASK_URL}?status=${status}`, HEADER)
         const data = await response
 
         setTasks(data.data.data)
@@ -107,7 +112,7 @@ const Home = () => {
   const searchHandler = async () => {
 
     try {
-      const response = await axios.get(`http://localhost:3000/tasks?search=${search}`, header)
+      const response = await axios.get(`${BASE_TASK_URL}?search=${search}`, HEADER)
       const data = await response
       setTasks(data.data.data)
       setSearchError("")
@@ -119,13 +124,18 @@ const Home = () => {
 
   const categoryHandler = async (category) => {
 
+    if (category !== "ALL"){
+
+    
     try {
-      const response = await axios.get(`http://localhost:3000/tasks?category=${category}`, header)
+      const response = await axios.get(`${BASE_TASK_URL}?category=${category}`, HEADER)
       const data = await response
       setTasks(data.data.data)
-      console.log(data)
+      console.log(data.data.data)
     } catch (error) {
       console.log(error)
+    }}else{
+      fetchTasks()
     }
 
   }
@@ -148,7 +158,12 @@ const Home = () => {
               <i className="fa fa-plus"></i>
             </button>
 
-            <select
+          </div>
+
+          <div className="task__content-header">
+          <div className="filter-header">
+          <label htmlFor="Filter_status">Status:</label>
+          <select
               name="Filter_status"
               id="Filter_status"
               onChange={(e) => filterTaskByStatusHandler(e.target.value)}>
@@ -159,21 +174,22 @@ const Home = () => {
               <option value="DONE">DONE</option>
 
             </select>
+            </div>
 
-            <select
-              name="Filter_category"
-              id="Filter_category"
-              onChange={(e) => categoryHandler(e.target.value)}>
+            <div className="filter-header">
 
-              <option value="REACTJS">REACTJS</option>
-              <option value="NODEJS">NODEJS</option>
-              <option value="EXPRESSJS">EXPRESSJS</option>
-              <option value="NESTJS">NESTJS</option>
-              <option value="NEXTJS">NEXTJS</option>
+            <label htmlFor="category">Category:</label>
+            <select id='category' name='categoryType' onChange={(e) => categoryHandler(e.target.value)}>
+                  <option value="ALL">ALL</option>
+                  {
+                    categories.length && categories.map((category, index) => (
+                      <option key={index} value={category}>{category}</option>
+                    ))
+                  }
+                </select>
 
-            </select>
+                </div>
           </div>
-
 
           <div className="task__content-tasks">
             {
@@ -209,7 +225,7 @@ const Home = () => {
 
                   <FontAwesomeIcon className="trash_icon" icon={faTrashCan} onClick={() => { deleteTaskHandler(task._id) }} />
                 </div>
-                <button onClick={() => navigate(`/task/${task.category}`)}>Show more tasks</button>
+                <button onClick={() => navigate(`/task/${task.categoryUUID}`)}>Show more tasks</button>
               </div>
             ))}
 

@@ -25,7 +25,8 @@ export class Task {
     @Prop({type:mongoose.Schema.Types.ObjectId, ref:'Category'})
     category: Category
 
-
+    @Prop()
+    categoryUUID: string
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task)

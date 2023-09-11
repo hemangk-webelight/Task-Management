@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TasksService = void 0;
 const common_1 = require("@nestjs/common");
+const uuid_1 = require("uuid");
 const task_status_enum_1 = require("./task-status.enum");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
@@ -25,15 +26,32 @@ let TasksService = class TasksService {
         this.logger = new common_1.Logger('TaskService');
     }
     async getTasks(filterDto, user) {
-        let tasks = this.taskModel.find({ user: user });
-        const { status, search } = filterDto;
-        if (status) {
-            tasks = this.taskModel.find({ status, user: user });
-        }
-        if (search) {
-            tasks = this.taskModel.find({ $or: [{ title: { '$regex': search, '$options': 'i' } }, { desription: { '$regex': search, '$options': 'i' } }, { status: { '$regex': search, '$options': 'i' } }], user: user });
-        }
         try {
+            let tasks = this.taskModel.find({ user: user });
+            const { status, search, category } = filterDto;
+            if (status) {
+                tasks = this.taskModel.find({ status, user: user });
+            }
+            if (search) {
+                tasks = this.taskModel.find({
+                    $or: [{
+                            title: { '$regex': search, '$options': 'i' }
+                        },
+                        { desription: { '$regex': search, '$options': 'i' } },
+                        { status: { '$regex': search, '$options': 'i' } }],
+                    user: user
+                });
+            }
+            if (category) {
+                const get_category = await this.categoryModel.findOne({ category });
+                if (!get_category) {
+                    throw new common_1.NotFoundException("task with this category doesn't found");
+                }
+                else {
+                    let task = await this.taskModel.find({ categoryUUID: get_category.uuid, user });
+                    return task;
+                }
+            }
             return tasks;
         }
         catch (error) {
@@ -43,6 +61,7 @@ let TasksService = class TasksService {
     }
     async createTask(createTaskDto, userData) {
         const { title, description, categoryType } = createTaskDto;
+        const id = (0, uuid_1.v4)();
         const task = new this.taskModel();
         task.title = title;
         task.description = description;
@@ -56,9 +75,11 @@ let TasksService = class TasksService {
         if (!get_category) {
             get_category = new this.categoryModel();
             get_category.category = categoryType;
+            get_category.uuid = id;
             get_category.tasks = [task];
             await get_category.save();
             task.category = get_category;
+            task.categoryUUID = id;
             await task.save();
             user.tasks.push(task);
             await user.save();
@@ -67,12 +88,17 @@ let TasksService = class TasksService {
             get_category.tasks.push(task);
             await get_category.save();
             task.category = get_category;
+            task.categoryUUID = get_category.uuid;
             await task.save();
             user.tasks.push(task);
             await user.save();
         }
     }
     async deleteTask(id, user) {
+        const removeFromCategory = await this.categoryModel.updateMany({ tasks: id }, { $pull: { tasks: id } });
+        console.log("category", removeFromCategory);
+        const removeFromUser = await this.userModel.updateMany({ tasks: id }, { $pull: { tasks: id } });
+        console.log("category", removeFromUser);
         const result = await this.taskModel.findByIdAndDelete({ _id: id, user: user });
         if (result === null || !result) {
             throw new common_1.NotFoundException("Task does not found");

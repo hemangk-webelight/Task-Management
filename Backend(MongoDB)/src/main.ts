@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import * as config from 'config'
+import * as dotenv from 'dotenv'
 
 import * as express from 'express'; 
 
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.use(express.json())
   app.use(express.urlencoded({extended: true}))
 
+  dotenv.config()
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

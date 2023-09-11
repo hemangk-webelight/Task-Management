@@ -1,9 +1,10 @@
-import '../CSS/login.css'
+import '../../CSS/login.css'
 import axios from 'axios'
 
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
+import { BASE_AUTH_URL } from '../../constants'
 
 const Signup = () => {
 
@@ -37,7 +38,7 @@ const Signup = () => {
     try {
       e.preventDefault();
 
-      const response = await axios.post("http://localhost:3000/auth/signup", formData)
+      const response = await axios.post(`${BASE_AUTH_URL}/signup`, formData)
 
       if (response.status === 201) {
         const data = await response
@@ -77,6 +78,7 @@ const Signup = () => {
             <div className="login__field">
               <label htmlFor="username">email:</label>
               <i className="login__icon fa fa-user"></i>
+
               <input
                 type="email"
                 className="login__input"
@@ -84,6 +86,7 @@ const Signup = () => {
                 onChange={changeHandler}
                 id='email'
                 name='email' />
+
               <span style={{ color: 'red', fontSize: '14px' }} >{errors.nameError}</span>
             </div>
 

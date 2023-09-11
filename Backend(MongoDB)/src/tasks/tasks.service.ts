@@ -6,6 +6,7 @@ import {
     UnauthorizedException
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { v4 as uuid } from 'uuid'
 import { GetTasksFilterDto } from './dto/task-filter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
@@ -38,7 +39,7 @@ export class TasksService {
 
             let tasks = this.taskModel.find({ user: user })
 
-            const { status, search } = filterDto
+            const { status, search, category } = filterDto
 
             if (status) {
                 tasks = this.taskModel.find({ status, user: user })
@@ -56,6 +57,16 @@ export class TasksService {
                 })
             }
 
+            if(category){
+                const get_category = await this.categoryModel.findOne({category})
+                if(!get_category){
+                    throw new NotFoundException("task with this category doesn't found")
+                }else{
+                    let task = await this.taskModel.find({categoryUUID: get_category.uuid, user})
+                    return task
+                }
+            }
+
 
             return tasks
 
@@ -71,7 +82,7 @@ export class TasksService {
 
         const { title, description, categoryType } = createTaskDto;
 
-
+        const id = uuid()
         const task = new this.taskModel()
 
         task.title = title;
@@ -91,11 +102,13 @@ export class TasksService {
 
             get_category = new this.categoryModel()
             get_category.category = categoryType
+            get_category.uuid = id
             // get_category.users = [userData]
             get_category.tasks = [task]
 
             await get_category.save()
             task.category = get_category
+            task.categoryUUID = id
             await task.save();
             user.tasks.push(task)
             await user.save()
@@ -120,6 +133,7 @@ export class TasksService {
             get_category.tasks.push(task)
             await get_category.save()
             task.category = get_category
+            task.categoryUUID = get_category.uuid
             await task.save()
             user.tasks.push(task)
             await user.save()
@@ -131,6 +145,11 @@ export class TasksService {
 
     async deleteTask(id: ObjectId, user: User): Promise<void> {
 
+        
+        const removeFromCategory = await this.categoryModel.updateMany({tasks: id}, { $pull: { tasks: id}})
+        console.log("category",removeFromCategory)
+        const removeFromUser = await this.userModel.updateMany({tasks: id}, { $pull: { tasks: id}})
+        console.log("category",removeFromUser)
         const result = await this.taskModel.findByIdAndDelete({ _id: id, user: user });
 
         if (result === null || !result) {

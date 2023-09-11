@@ -9,25 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetTasksFilterDto = void 0;
-const class_validator_1 = require("class-validator");
-const task_status_enum_1 = require("../task-status.enum");
-class GetTasksFilterDto {
-}
-exports.GetTasksFilterDto = GetTasksFilterDto;
+exports.CategoryTypeSchema = exports.CategoryType = void 0;
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const category_entity_1 = require("./category.entity");
+let CategoryType = class CategoryType {
+};
+exports.CategoryType = CategoryType;
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsIn)([task_status_enum_1.TaskStatus.OPEN, task_status_enum_1.TaskStatus.IN_PROGRESS, task_status_enum_1.TaskStatus.DONE]),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], GetTasksFilterDto.prototype, "status", void 0);
+], CategoryType.prototype, "category", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, mongoose_1.Prop)(),
     __metadata("design:type", String)
-], GetTasksFilterDto.prototype, "search", void 0);
+], CategoryType.prototype, "uuid", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], GetTasksFilterDto.prototype, "category", void 0);
-//# sourceMappingURL=task-filter.dto.js.map
+    (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Category' }] }),
+    __metadata("design:type", category_entity_1.Category)
+], CategoryType.prototype, "CategoryData", void 0);
+exports.CategoryType = CategoryType = __decorate([
+    (0, mongoose_1.Schema)()
+], CategoryType);
+exports.CategoryTypeSchema = mongoose_1.SchemaFactory.createForClass(CategoryType);
+//# sourceMappingURL=categoryType.entity.js.map

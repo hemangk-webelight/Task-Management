@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify';
-import '../CSS/login.css'
 import axios from 'axios'
+import '../../CSS/login.css'
+import { BASE_AUTH_URL } from '../../constants';
+import React, { useState } from 'react'
+import { toast } from 'react-toastify';
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 
-const Login = () => {
+function Login() {
 
   const [formData, setFormData] = useState({
     email: '',
@@ -12,7 +13,7 @@ const Login = () => {
   })
 
   const [errors, setErrors] = useState({
-    nameError: '',
+    emailError: '',
     passwordError: ''
   })
 
@@ -25,7 +26,7 @@ const Login = () => {
     })
 
     setErrors({
-      nameError: '',
+      emailError: '',
       passwordError: ''
     })
   }
@@ -36,8 +37,8 @@ const Login = () => {
 
       e.preventDefault();
 
-      const response = await axios.post("http://localhost:3000/auth/signin", formData)
-
+      const response = await axios.post(`${BASE_AUTH_URL}/signin`, formData)
+      
       if (response.status === 200) {
 
         const data = await response
@@ -49,10 +50,13 @@ const Login = () => {
     } catch (error) {
 
       const errorMsg = error.response.data.message
+
       if (Array.isArray(errorMsg)) {
-        const nameError = error.response.data.message.filter(name => name.includes("email"))
-        const passwordError = error.response.data.message.filter(name => name.includes("password"))
-        setErrors(state =>
+        
+          const nameError = error.response.data.message.filter(name => name.includes("email"))
+          const passwordError = error.response.data.message.filter(name => name.includes("password"))
+        
+          setErrors(state =>
         ({
           ...state, nameError, passwordError
         }))
@@ -83,7 +87,8 @@ const Login = () => {
                 onChange={changeHandler}
                 id='email'
                 name='email' />
-              <span style={{ color: 'red', fontSize: '14px' }} >{errors.nameError}</span>
+
+              <span style={{ color: 'red', fontSize: '14px' }} >{errors.emailError}</span>
             </div>
 
             <div className="login__field">
@@ -110,6 +115,7 @@ const Login = () => {
             </button>
 
             <p>Not Signup? <Link to={'/signup'}>SignUp Here</Link> </p>
+
           </form>
         </div>
       </div>

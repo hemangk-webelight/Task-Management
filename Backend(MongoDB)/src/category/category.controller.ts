@@ -11,12 +11,16 @@ export class CategoryController {
 
     @Get()
     async getCategories(@Res() res: Response): Promise<Response> {
-        const categories = ["ReactJS", "ExpressJS", "NodeJS", "NestJS", "NextJS"]
+        // const categories = ["ReactJS", "ExpressJS", "NodeJS", "NestJS", "NextJS"]
+        const data = await this.categoryService.getTasksCategory()
+        const categories = data.map(type => {
+            return type.category
+        })
         return res.status(200).json({message: "All categories fetched successfully", data: categories})
     }
     
     @Get("/:id")
-    async getTaskByCategory(@Param('id') id: ObjectId, @Res() res: Response) {
+    async getTaskByCategory(@Param('id') id: string, @Res() res: Response) {
 
         const data = await this.categoryService.getAllTaskDataByCategory(id)
         

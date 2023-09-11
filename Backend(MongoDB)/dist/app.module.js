@@ -18,7 +18,7 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mongoose_1.MongooseModule.forRoot("mongodb+srv://hemangk_webelight:oH30uJ6mb0yXyAc3@hemang-webelight.enfiyyu.mongodb.net/taskmanagement"),
+            mongoose_1.MongooseModule.forRoot(`mongodb+srv://hemangk_webelight:oH30uJ6mb0yXyAc3@hemang-webelight.enfiyyu.mongodb.net/taskmanagement`),
             tasks_module_1.TasksModule,
             auth_module_1.AuthModule,
             category_module_1.CategoryModule

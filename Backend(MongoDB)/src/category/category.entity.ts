@@ -11,6 +11,9 @@ export class Category{
     @Prop()
     category: string;
 
+    @Prop()
+    uuid: string
+
     // @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]})
     // users: User[]
 

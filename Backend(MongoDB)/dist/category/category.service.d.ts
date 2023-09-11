@@ -23,13 +23,12 @@
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
 import { Category } from "./category.entity";
-import { Model, ObjectId } from "mongoose";
-import { TaskCategory } from "./category.enum";
+import { Model } from "mongoose";
 export declare class CategoryService {
     private categoryModel;
     constructor(categoryModel: Model<Category>);
-    getAllTaskDataByCategory(id: ObjectId): Promise<import("../tasks/task.entity").Task[]>;
-    filterTaskCategory(category: TaskCategory): Promise<(import("mongoose").Document<unknown, {}, Category> & Category & {
+    getTasksCategory(): Promise<(import("mongoose").Document<unknown, {}, Category> & Category & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
+    getAllTaskDataByCategory(id: string): Promise<import("../tasks/task.entity").Task[]>;
 }

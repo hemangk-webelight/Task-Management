@@ -1,8 +1,9 @@
 import axios from 'axios'
-import '../CSS/newTask.css'
+import '../../CSS/newTask.css'
 
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { BASE_CATEGORY_URL, BASE_TASK_URL } from '../../constants';
 
 const NewTask = ({ setIsOpen }) => {
 
@@ -43,7 +44,7 @@ const NewTask = ({ setIsOpen }) => {
   }
 
   const getCategories = async () => {
-    const response = await axios.get('http://localhost:3000/category')
+    const response = await axios.get(`${BASE_CATEGORY_URL}`)
 
     const categoryOptions = await response
 
@@ -56,7 +57,7 @@ const NewTask = ({ setIsOpen }) => {
     try {
 
       e.preventDefault();
-      const response = await axios.post('http://localhost:3000/tasks', task, header)
+      const response = await axios.post(`${BASE_TASK_URL}`, task, header)
 
       const data = await response;
       toast.success(data.data.message)
@@ -103,6 +104,19 @@ const NewTask = ({ setIsOpen }) => {
                   }
                 </select>
               </div>
+
+              <div className="newTask__field">
+                <input
+                  type="text"
+                  className="newTask__input"
+                  value={task.categoryType}
+                  onChange={changeHandler}
+                  placeholder='Enter new category'
+                  id='categoryType'
+                  name='categoryType' />
+                {/* <span style={{ color: 'red', fontSize: '14px' }} >{errors.titleError}</span> */}
+              </div>
+
               <div className="newTask__field">
                 <label htmlFor="title">Title:</label>
                 <input

@@ -29,8 +29,8 @@ const jwtConfig = config.get('jwt')
         host: 'smtp.gmail.com',
         secure: false,
         auth: {
-          user: process.env.USERNAME,
-          pass: process.env.PASSWORD,
+          user: 'kanojiyahemang123@gmail.com',
+          pass: 'updsozqagxrtkkny',
         },
       },
       defaults: {

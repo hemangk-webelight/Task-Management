@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(`mongodb+srv://hemangk_webelight:${process.env.DB_PASSWORD}@hemang-webelight.enfiyyu.mongodb.net/taskmanagement`),
+    MongooseModule.forRoot(`mongodb+srv://hemangk_webelight:oH30uJ6mb0yXyAc3@hemang-webelight.enfiyyu.mongodb.net/taskmanagement`),
     TasksModule, 
     AuthModule, 
     CategoryModule

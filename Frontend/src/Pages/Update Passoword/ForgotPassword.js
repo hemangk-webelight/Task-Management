@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
-import '../CSS/login.css'
 import axios from 'axios'
+import '../../CSS/login.css'
 import { toast } from 'react-toastify'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BASE_AUTH_URL } from '../../constants'
 
 const ForgotPassword = () => {
 
@@ -13,7 +14,8 @@ const ForgotPassword = () => {
   const submitHandler = async (e) => {
 
     e.preventDefault();
-    const response = await axios.post('http://localhost:3000/auth/forgotPassword', { email })
+    
+    const response = await axios.post(`${BASE_AUTH_URL}/forgotPassword`, { email })
 
     const data = await response;
     toast.success(data.data.message)

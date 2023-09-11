@@ -20,6 +20,10 @@ __decorate([
     __metadata("design:type", String)
 ], Category.prototype, "category", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], Category.prototype, "uuid", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: [{ type: mongoose_2.default.Schema.Types.ObjectId, ref: 'Task' }] }),
     __metadata("design:type", Array)
 ], Category.prototype, "tasks", void 0);

@@ -10,4 +10,8 @@ export class GetTasksFilterDto{
     @IsNotEmpty()
     search: string;
 
+    @IsOptional()
+    @IsNotEmpty()
+    category: string;
+
 }

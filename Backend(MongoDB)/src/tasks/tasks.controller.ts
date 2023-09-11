@@ -56,7 +56,7 @@ export class TasksController {
 
     @Post()
     async createTask(
-        @Body(CategoryPipe) createTaskDto: CreateTaskDto,
+        @Body() createTaskDto: CreateTaskDto,
         @GetUser() user: User,
         @Res() res: Response
     ): Promise<Response> {

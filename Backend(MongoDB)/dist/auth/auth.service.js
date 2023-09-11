@@ -67,7 +67,6 @@ let AuthService = class AuthService {
     }
     async forgotPassword(credentials) {
         const { email } = credentials;
-        console.log("hello", email);
         const randomPasssword = randomstring.generate({
             length: 15,
             charset: 'alphabetic'
@@ -81,7 +80,8 @@ let AuthService = class AuthService {
         const data = await this.mailerService.sendMail({
             to: email,
             subject: 'Reset Password',
-            html: `<p>Hello, ${user_exist.username} ! Here is your temporary password: ${randomPasssword}.<br/><br/> Update your password using this password</p>`
+            html: `<p>Hello, ${user_exist.username} ! Here is your temporary password: ${randomPasssword}.<br/><br/> 
+                    Update your password using this password</p>`
         });
         if (data.response.includes('OK')) {
             return data;

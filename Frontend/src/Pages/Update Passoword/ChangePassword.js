@@ -1,6 +1,8 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { BASE_AUTH_URL } from '../../constants'
 
 const ChangePassword = () => {
 
@@ -19,11 +21,12 @@ const ChangePassword = () => {
   }
 
   const submitHandler = async (e) => {
-    const response = await axios.post("http://localhost:3000/auth/changePassword", formdata)
+    e.preventDefault();
+    const response = await axios.post(`${BASE_AUTH_URL}/changePassword`, formdata)
     console.log(response)
     const data = await response;
     navigate('/login')
-    console.log(data)
+    toast.success(data.data.message)
   }
 
 

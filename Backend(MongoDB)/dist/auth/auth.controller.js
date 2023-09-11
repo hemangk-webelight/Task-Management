@@ -32,11 +32,11 @@ let AuthController = class AuthController {
     }
     async sendMailForPassword(credentials, res) {
         console.log("Body", credentials);
-        const mail = await this.authService.forgotPassword(credentials);
+        await this.authService.forgotPassword(credentials);
         return res.status(200).json({ message: 'Mail sent, please check your email' });
     }
     async changePassword(credential, res) {
-        const data = await this.authService.changePassword(credential);
+        await this.authService.changePassword(credential);
         return res.status(200).json({ message: 'credentials updated successfully' });
     }
 };

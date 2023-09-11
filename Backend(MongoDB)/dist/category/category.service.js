@@ -20,14 +20,27 @@ let CategoryService = class CategoryService {
     constructor(categoryModel) {
         this.categoryModel = categoryModel;
     }
-    async getAllTaskDataByCategory(id) {
-        const data = await this.categoryModel.findById({ _id: id }).populate([{ path: 'tasks', populate: { path: 'category', select: 'category' } }, { path: 'tasks', populate: { path: 'user', select: 'username' } }]);
-        const { tasks, category } = data;
-        return tasks;
+    async getTasksCategory() {
+        const data = await this.categoryModel.find();
+        return data;
     }
-    async filterTaskCategory(category) {
-        let tasks = await this.categoryModel.find({ category });
-        console.log("service", tasks);
+    async getAllTaskDataByCategory(id) {
+        const data = await this.categoryModel.findOne({ uuid: id }).populate([{
+                path: 'tasks',
+                populate: {
+                    path: 'category',
+                    select: 'category'
+                }
+            },
+            {
+                path: 'tasks',
+                populate: {
+                    path: 'user',
+                    select: 'username'
+                }
+            }]);
+        console.log(data);
+        const { tasks, category } = data;
         return tasks;
     }
 };

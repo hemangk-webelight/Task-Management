@@ -12,10 +12,14 @@ export class CategoryService {
         @InjectModel('Category')
         private categoryModel: Model<Category>
     ) { }
+    
+    async getTasksCategory() {
+        const data = await this.categoryModel.find()
+        return data
+    }
+    async getAllTaskDataByCategory(id: string) {
 
-    async getAllTaskDataByCategory(id: ObjectId) {
-
-        const data = await this.categoryModel.findById({ _id: id }).populate([{
+        const data = await this.categoryModel.findOne({ uuid: id }).populate([{
             path: 'tasks',
             populate: {
                 path: 'category',
@@ -30,7 +34,7 @@ export class CategoryService {
             }
         }])
 
-
+        console.log(data)
         const { tasks, category } = data
 
         return tasks

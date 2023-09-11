@@ -15,37 +15,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryController = void 0;
 const common_1 = require("@nestjs/common");
 const category_service_1 = require("./category.service");
-const category_enum_1 = require("./category.enum");
 let CategoryController = class CategoryController {
     constructor(categoryService) {
         this.categoryService = categoryService;
+    }
+    async getCategories(res) {
+        const data = await this.categoryService.getTasksCategory();
+        const categories = data.map(type => {
+            return type.category;
+        });
+        return res.status(200).json({ message: "All categories fetched successfully", data: categories });
     }
     async getTaskByCategory(id, res) {
         const data = await this.categoryService.getAllTaskDataByCategory(id);
         return res.status(200).json({ message: "All data fetched", data: data });
     }
-    async taskBycategoryFilter(category, res) {
-        const tasks = await this.categoryService.filterTaskCategory(category);
-        console.log("controller", tasks[0].tasks);
-    }
 };
 exports.CategoryController = CategoryController;
+__decorate([
+    (0, common_1.Get)(),
+    __param(0, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], CategoryController.prototype, "getCategories", null);
 __decorate([
     (0, common_1.Get)("/:id"),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], CategoryController.prototype, "getTaskByCategory", null);
-__decorate([
-    (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)("category")),
-    __param(1, (0, common_1.Res)()),
-    __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
-], CategoryController.prototype, "taskBycategoryFilter", null);
+], CategoryController.prototype, "getTaskByCategory", null);
 exports.CategoryController = CategoryController = __decorate([
     (0, common_1.Controller)('category'),
     __metadata("design:paramtypes", [category_service_1.CategoryService])

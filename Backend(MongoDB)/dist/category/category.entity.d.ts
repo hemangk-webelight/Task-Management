@@ -3,6 +3,7 @@ import mongoose, { HydratedDocument } from "mongoose";
 export type CategoryDocument = HydratedDocument<Category>;
 export declare class Category {
     category: string;
+    uuid: string;
     tasks: Task[];
 }
 export declare const CategorySchema: mongoose.Schema<Category, mongoose.Model<Category, any, any, any, mongoose.Document<unknown, any, Category> & Category & {

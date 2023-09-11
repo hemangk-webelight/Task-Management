@@ -37,6 +37,13 @@
     font-size: 18px;
 }
 
+.filter-header{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+}
+
 .task__content {
     margin: 10px;
     width: 80%;

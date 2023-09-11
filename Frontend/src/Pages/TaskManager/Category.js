@@ -1,10 +1,11 @@
 import axios from 'axios'
-import '../CSS/category.css'
-import Header from '../Component/Header'
+import '../../CSS/category.css'
+import Header from '../../shared/Component/Header'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { faUpDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { BASE_CATEGORY_URL } from '../../constants'
 
 
 const Category = () => {
@@ -17,7 +18,7 @@ const Category = () => {
 
   const getAllDataForSimilarCategory = async () => {
 
-    const response = await axios.get(`http://localhost:3000/category/${id}`);
+    const response = await axios.get(`${BASE_CATEGORY_URL}/${id}`);
 
     const data = await response
     setTasks(data.data.data)
